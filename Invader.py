@@ -13,6 +13,9 @@ class Invader:
     y: float = 42
     typed: str = ""
     shake_timer: int = 0
+    age_ms: int = 0
+    mistakes: int = 0
+    revealed: bool = False
 
     def __post_init__(self):
         self.text = self.text.upper()
@@ -20,6 +23,7 @@ class Invader:
         self.x = random.randint(80, self.screen_width - 80)
 
     def move(self, dt):
+        self.age_ms += dt
         self.y += self.speed * (dt / 1000)
         self.shake_timer = max(0, self.shake_timer - 1)
 
@@ -41,6 +45,13 @@ class Invader:
 
         self.shake_timer = 10
         return False
+
+    def miss(self, reveal_after):
+        self.mistakes += 1
+        self.shake_timer = 10
+
+        if self.mistakes >= reveal_after:
+            self.revealed = True
 
     def backspace(self):
         self.typed = self.typed[:-1]
