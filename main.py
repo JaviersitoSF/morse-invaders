@@ -143,8 +143,8 @@ class Game:
         return max(250, int(60000 / max(1, wpm)))
 
     @staticmethod
-    def fall_speed_for_wpm(wpm):
-        return 60 + (wpm * 2.5)
+    def fall_speed_for_score(score):
+        return min(90, 18 + (score * 0.02))
 
     def run(self):
         while self.running:
@@ -252,7 +252,8 @@ class Game:
             return
 
         word = self.next_word()
-        invader = Invader(word, self.fall_speed_for_wpm(self.wpm), SCREEN_WIDTH)
+        invader = Invader(word, self.fall_speed_for_score(self.score), SCREEN_WIDTH)
+        # print(f"Spawned word={invader.text} morse={invader.hint} score={self.score} speed={invader.speed:.1f}")
         self.invaders.append(invader)
         self.next_spawn_at = pygame.time.get_ticks() + self.spawn_interval_ms
         self.morse_player.play(invader.hint)
